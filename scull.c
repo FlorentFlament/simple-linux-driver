@@ -3,6 +3,7 @@
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/moduleparam.h>
+#include <linux/mutex.h>
 #include <linux/types.h>
 #include <linux/uaccess.h>
 
@@ -10,6 +11,7 @@ MODULE_LICENSE("GPL v2");
 
 static dev_t scull_dev;
 static struct cdev scull_cdev;
+static DEFINE_MUTEX(scull_lock);
 
 static ssize_t scull_read(struct file *filp, char __user *buf, size_t count, loff_t *f_pos)
 {
@@ -38,8 +40,11 @@ static ssize_t scull_write(struct file *filp, const char __user *buf, size_t cou
   }
   lbuf[count] = '\0';
 
+  // Locking on a mutex to log the whole block
+  mutex_lock(&scull_lock);
   printk(KERN_INFO "scull: Read %lu bytes from user\n", count);
   printk(KERN_INFO "scull: %s\n", lbuf);
+  mutex_unlock(&scull_lock);
   return count;
 }
 
