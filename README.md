@@ -11,9 +11,12 @@ Fedora][2])
 Let's play with it:
 
 ```text
+$ uname -a
+Linux amn 4.16.0-rc3-flw1+ #1 SMP Wed Feb 28 17:30:28 CET 2018 x86_64 x86_64 x86_64 GNU/Linux
+
 $ make
 ...
-$ insmod scull.ko
+$ sudo insmod scull.ko
 $ dmesg | tail -3
 [297172.851954] scull: Hello !
 [297172.851956] scull: Char device number registered: 243 0
